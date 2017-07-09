@@ -25,7 +25,7 @@ extension SyncRouter {
     
     /// Registers a put route
     public func put(_ path: String..., handler: @escaping ((Request) throws -> (ResponseRepresentable))) {
-        self.register(path, method: .get, handler: handler)
+        self.register(path, method: .put, handler: handler)
     }
     
     /// Registers a post route
