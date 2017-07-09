@@ -24,10 +24,8 @@ class LeopardTests: XCTestCase {
 //            }
 //        }
         
-        server.get("/user/:user/friends") { request in
-            guard let username = try request.extract(String.self, from: ":user") else {
-                throw InvalidRequest()
-            }
+        server.get("user", ":user", "friends") { request in
+            let username = try request.extract(from: "user")
             
             return try db["users"].findOneAsync("username" == username).replace { user in
                 guard let user = user else {
@@ -50,4 +48,3 @@ class LeopardTests: XCTestCase {
 }
 
 struct NotFound : Error {}
-struct InvalidRequest : Error {}

@@ -10,7 +10,7 @@ public class RoutedWebServer : WebsocketRouter {
     }
     
     let server: HTTPServer
-    let router = TrieRouter()
+    let router = TrieRouter(startingTokensWith: 0x3a)
     
     public init() throws {
         self.server = try HTTPServer(handler: router.handle)
