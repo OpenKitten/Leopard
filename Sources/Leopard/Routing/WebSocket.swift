@@ -13,7 +13,6 @@ extension WebsocketRouter {
                 try handler(websocket)
             
             } catch {
-//                log(error: error)
                 client.close()
             }
         }

@@ -12,6 +12,9 @@ extension SyncRouter {
                 let response = try handler(request)
                 
                 try response.makeResponse().send(to: client)
+            } catch let error as Encodable {
+                Application.logger?.log(error, level: .error)
+                client.close()
             } catch {
                 client.close()
             }

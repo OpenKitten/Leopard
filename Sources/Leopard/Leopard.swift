@@ -10,9 +10,23 @@ public class RoutedWebServer : WebsocketRouter {
     }
     
     let server: HTTPServer
-    let router = TrieRouter(startingTokensWith: 0x3a)
+    let router: TrieRouter
     
     public init() throws {
+        self.router = TrieRouter(startingTokensWith: 0x3a)
+        self.server = try HTTPServer(handler: router.handle)
+    }
+    
+    public init(_ config: RoutingConfig) throws {
+        let routingToken = config.routingToken
+        
+        if let routingToken = routingToken {
+            guard routingToken.utf8.count <= 1 else {
+                throw LeopardConfigError.invalidRoutingToken(routingToken)
+            }
+        }
+        
+        self.router = TrieRouter(startingTokensWith: config.routingToken?.utf8.first)
         self.server = try HTTPServer(handler: router.handle)
     }
     

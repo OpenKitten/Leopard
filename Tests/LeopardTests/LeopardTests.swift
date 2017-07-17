@@ -1,12 +1,13 @@
 import XCTest
 import MongoKitten
+import ExtendedJSON
 @testable import Leopard
 
 class LeopardTests: XCTestCase {
     func testAsyncRouting() throws {
         let db = try Database("mongodb://localhost/leopard")
         
-        let server = try AsyncWebServer()
+        let server = try SyncWebServer()
 //        router.get("/user/:user/friends") { request in
 //            guard
 //                let username = try request.extract(String.self, from: ":user") else {
@@ -24,18 +25,47 @@ class LeopardTests: XCTestCase {
 //            }
 //        }
         
+        try db["users"].remove()
+        
+        let id = try db["users"].insert([
+            "username": "root"
+        ])
+        
+        try db["users"].insert([
+            "username": "test0",
+            "friend": id
+        ])
+        
+        try db["users"].insert([
+            "username": "test1",
+            "friend": id
+        ])
+        
+        try db["users"].insert([
+            "username": "test2",
+            "friend": id
+        ])
+        
+        var sockets = [WebSocket]()
+        
+        server.websocket("pong") { websocket in
+            websocket.onText { text in
+                try websocket.send(text)
+            }
+            
+            sockets.append(websocket)
+        }
+        
         server.get("user", ":user", "friends") { request in
             let username = try request.extract(from: "user")
             
-            return try db["users"].findOneAsync("username" == username).replace { user in
-                guard let user = user else {
-                    throw NotFound()
-                }
-                
-                return try db["users"].findAsync("friend" == user["_id"]).map { friends in
-                    return Array(friends).makeExtendedJSON().serializedString()
-                }
+            guard let user = try db["users"].findOne("username" == username) else {
+                throw NotFound()
             }
+            
+            let friends = try db["users"].find("friend" == user["_id"])
+            
+            return Document(array: Array(friends)).makeExtendedJSONString()
         }
         
         try server.start()
