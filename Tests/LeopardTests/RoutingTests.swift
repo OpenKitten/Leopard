@@ -4,16 +4,6 @@ import ExtendedJSON
 @testable import Leopard
 
 class RoutingTests: XCTestCase {
-    func testAgainstVapor() throws {
-        let server = try SyncWebServer()
-        
-        server.get("path") { _ in
-            return "kaas"
-        }
-        
-        try server.start()
-    }
-    
     func testAsyncRouting() throws {
         let db = try Database("mongodb://localhost/leopard")
         
