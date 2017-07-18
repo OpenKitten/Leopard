@@ -1,3 +1,5 @@
+import Lynx
+
 extension AsyncRouter {
     public func grouped(_ path: String...) -> AsyncRoutingGroup {
         return AsyncRoutingGroup(path, pointingTo: self)
@@ -17,8 +19,8 @@ extension AsyncRouter {
 }
 
 public struct AsyncRoutingGroup : AsyncRouter {
-    public func handle(_ request: Request, for client: Client) {
-        router.handle(request, for: client)
+    public func handle(_ request: Request, for remote: HTTPRemote) {
+        router.handle(request, for: remote)
     }
     
     public func register(at path: [String], method: Method, handler: @escaping RequestHandler) {

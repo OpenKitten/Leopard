@@ -7,16 +7,16 @@ public protocol SyncRouter : Router {}
 extension SyncRouter {
     /// Registers a route
     fileprivate func register(_ path: [String], method: Lynx.Method, handler: @escaping ((Request) throws -> (ResponseRepresentable))) {
-        self.register(at: path, method: method) { request, client in
+        self.register(at: path, method: method) { request, remote in
             do {
                 let response = try handler(request)
                 
-                try response.makeResponse().send(to: client)
-            } catch let error as Encodable {
+                try remote.send(try response.makeResponse())
+            } catch let error as Encodable & Error {
                 Application.logger?.log(error, level: .error)
-                client.close()
+                remote.error(error)
             } catch {
-                client.close()
+                remote.error(error)
             }
         }
     }

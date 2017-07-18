@@ -5,8 +5,8 @@ public class RoutedWebServer : WebsocketRouter {
         router.register(at: path, method: method, handler: handler)
     }
     
-    public func handle(_ request: Request, for client: Client) {
-        router.handle(request, for: client)
+    public func handle(_ request: Request, for remote: HTTPRemote) {
+        router.handle(request, for: remote)
     }
     
     let server: HTTPServer
@@ -64,8 +64,8 @@ public final class SyncWrapper : SyncRouter {
         self.router = router
     }
     
-    public func handle(_ request: Request, for client: Client) {
-        router.handle(request, for: client)
+    public func handle(_ request: Request, for remote: HTTPRemote) {
+        router.handle(request, for: remote)
     }
 }
 
@@ -80,7 +80,7 @@ public final class AsyncWrapper : AsyncRouter {
         self.router = router
     }
     
-    public func handle(_ request: Request, for client: Client) {
-        router.handle(request, for: client)
+    public func handle(_ request: Request, for remote: HTTPRemote) {
+        router.handle(request, for: remote)
     }
 }

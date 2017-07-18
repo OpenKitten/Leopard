@@ -3,7 +3,25 @@ import MongoKitten
 import ExtendedJSON
 @testable import Leopard
 
+extension SyncWebServer : 
+
 class RoutingTests: XCTestCase {
+    func testSyncRouteGrouping() throws {
+        let server = try SyncWebServer()
+        
+        server.group(["path", "to"]) { group in
+            group.group(["group", "to"]) { group in
+                group.get("route") { _ in
+                    return "result"
+                }
+            }
+        }
+        
+        try server.handle(Request(method: .get, url: "/path/to/group/to/route", headers: [:]), for: TestClient { response in
+            guard
+        })
+    }
+    
     func testAsyncRouting() throws {
         let db = try Database("mongodb://localhost/leopard")
         

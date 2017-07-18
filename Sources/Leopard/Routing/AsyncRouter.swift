@@ -7,19 +7,23 @@ extension AsyncRouter {
     public typealias AsyncHandler = ((Request) throws -> (Future<ResponseRepresentable>))
     
     public func register(method: Method, at path: [String], handler: @escaping AsyncHandler) {
-        self.register(at: path, method: method)  { request, client in
+        self.register(at: path, method: method)  { request, remote in
             do {
                 try handler(request).then { response in
                     do {
-                        try response.assertSuccess().makeResponse().send(to: client)
+                        try remote.send(try response.assertSuccess().makeResponse())
+                    } catch let error as Encodable & Error {
+                        Application.logger?.log(error, level: .error)
+                        remote.error(error)
                     } catch {
-                        print(error)
-                        client.close()
+                        remote.error(error)
                     }
                 }
+            } catch let error as Encodable & Error {
+                Application.logger?.log(error, level: .error)
+                remote.error(error)
             } catch {
-                print(error)
-                client.close()
+                remote.error(error)
             }
         }
     }
