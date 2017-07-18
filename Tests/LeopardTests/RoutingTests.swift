@@ -9,6 +9,12 @@ extension TestClient {
     }
 }
 
+extension Body {
+    var string: String? {
+        return String(bytes: self.buffer, encoding: .utf8)
+    }
+}
+
 class RoutingTests: XCTestCase {
     func testSyncRouteGrouping() throws {
         let server = try SyncWebServer()
@@ -22,12 +28,12 @@ class RoutingTests: XCTestCase {
         }
         
         server.handle(Request(method: .get, url: "/path/to/group/to/route"), for: TestClient { response in
-            guard let body = try response.body?.makeBody() else {
+            guard let result = try response.body?.makeBody().string else {
                 XCTFail()
                 return
             }
             
-            guard String(bytes: body.buffer, encoding: .utf8) == "result" else {
+            guard result == "result" else {
                 XCTFail()
                 return
             }
