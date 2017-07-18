@@ -41,4 +41,3 @@ extension SyncRouter {
         self.register(path, method: .delete, handler: handler)
     }
 }
-
