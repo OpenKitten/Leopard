@@ -3,7 +3,11 @@ import MongoKitten
 import ExtendedJSON
 @testable import Leopard
 
-extension SyncWebServer : 
+extension TestClient {
+    init(_ closure: @escaping ResponseHandler) {
+        self.init(closure, or: { _ in XCTFail() })
+    }
+}
 
 class RoutingTests: XCTestCase {
     func testSyncRouteGrouping() throws {
@@ -17,8 +21,16 @@ class RoutingTests: XCTestCase {
             }
         }
         
-        try server.handle(Request(method: .get, url: "/path/to/group/to/route", headers: [:]), for: TestClient { response in
-            guard
+        server.handle(Request(method: .get, url: "/path/to/group/to/route"), for: TestClient { response in
+            guard let buffer = try response.body?.makeBody().buffer else {
+                XCTFail()
+                return
+            }
+            
+            guard String(bytes: buffer, encoding: .utf8) == "result" else {
+                XCTFail()
+                return
+            }
         })
     }
     
