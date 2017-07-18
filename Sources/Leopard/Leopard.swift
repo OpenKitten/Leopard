@@ -27,7 +27,12 @@ public class RoutedWebServer : WebsocketRouter {
         }
         
         self.router = TrieRouter(startingTokensWith: config.routingToken?.utf8.first)
-        self.server = try HTTPServer(handler: router.handle)
+        
+        if let config = config as? HTTPServerConfig {
+            self.server = try HTTPServer(hostname: config.hostname, port: config.port, handler: router.handle)
+        } else {
+            self.server = try HTTPServer(handler: router.handle)
+        }
     }
     
     public func start() throws -> Never {

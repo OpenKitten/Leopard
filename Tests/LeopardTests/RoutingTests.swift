@@ -3,7 +3,7 @@ import MongoKitten
 import ExtendedJSON
 @testable import Leopard
 
-class LeopardTests: XCTestCase {
+class RoutingTests: XCTestCase {
     func testAsyncRouting() throws {
         let db = try Database("mongodb://localhost/leopard")
         
@@ -72,7 +72,7 @@ class LeopardTests: XCTestCase {
     }
 
 
-    static var allTests: [(String, (LeopardTests) -> () throws -> Void)] = [
+    static var allTests: [(String, (RoutingTests) -> () throws -> Void)] = [
         ("testAsyncRouting", testAsyncRouting),
     ]
 }
