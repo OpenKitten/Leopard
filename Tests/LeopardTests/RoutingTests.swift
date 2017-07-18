@@ -22,12 +22,12 @@ class RoutingTests: XCTestCase {
         }
         
         server.handle(Request(method: .get, url: "/path/to/group/to/route"), for: TestClient { response in
-            guard let buffer = try response.body?.makeBody().buffer else {
+            guard let body = try response.body?.makeBody() else {
                 XCTFail()
                 return
             }
             
-            guard String(bytes: buffer, encoding: .utf8) == "result" else {
+            guard String(bytes: body.buffer, encoding: .utf8) == "result" else {
                 XCTFail()
                 return
             }
