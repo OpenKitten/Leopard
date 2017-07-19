@@ -1,9 +1,9 @@
 extension SyncRouter {
-    public func grouped<S: Sequence>(_ middlewares: S) -> SyncRoutingGroup where S.Element == SyncMiddleware {
+    public func grouped<S: Sequence>(_ middlewares: S) -> SyncRoutingGroup where S.Element == Middleware {
         return SyncRoutingGroup(Array(middlewares), pointingTo: self)
     }
     
-    public func grouped(_ middlewares: SyncMiddleware...) -> SyncRoutingGroup {
+    public func grouped(_ middlewares: Middleware...) -> SyncRoutingGroup {
         return SyncRoutingGroup(middlewares, pointingTo: self)
     }
 }
@@ -30,10 +30,10 @@ public struct SyncRoutingGroup : SyncRouter {
         }
     }
     
-    public let middlewares: [SyncMiddleware]
+    public let middlewares: [Middleware]
     let router: SyncRouter
     
-    public init(_ middlewares: [SyncMiddleware], pointingTo router: SyncRouter) {
+    public init(_ middlewares: [Middleware], pointingTo router: SyncRouter) {
         self.middlewares = middlewares.reversed()
         self.router = router
     }

@@ -15,9 +15,13 @@ extension Body {
     }
 }
 
-struct InterceptorMiddleware : SyncMiddleware {
+struct InterceptorMiddleware : Middleware {
     func handle(_ request: Request, for remote: HTTPRemote, chainingTo handler: (Request, HTTPRemote) -> ()) {
-        
+        do {
+            try remote.send(try "intercepted".makeResponse())
+        } catch {
+            remote.error(error)
+        }
     }
 }
 
@@ -31,14 +35,19 @@ class RoutingTests: XCTestCase {
             return "don't get here"
         }
         
+        var received = false
+        
         server.handle(request, for: TestClient { response in
             guard let result = response.body as? String else {
                 XCTFail()
                 return
             }
             
+            received = true
             XCTAssertEqual(result, "intercepted")
         })
+        
+        XCTAssert(received)
     }
     
     func testSyncRouteGrouping() throws {

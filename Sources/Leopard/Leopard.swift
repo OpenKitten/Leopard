@@ -41,9 +41,9 @@ public class RoutedWebServer : WebsocketRouter {
 }
 
 public final class SyncWebServer : RoutedWebServer, SyncRouter {
-    public let middlewares: [SyncMiddleware]
+    public let middlewares: [Middleware]
     
-    public init<S: Sequence>(middlewares: S, _ config: RoutingConfig? = nil) throws where S.Element == SyncMiddleware {
+    public init<S: Sequence>(middlewares: S, _ config: RoutingConfig? = nil) throws where S.Element : Middleware {
         self.middlewares = Array(middlewares)
         
         if let config = config {
