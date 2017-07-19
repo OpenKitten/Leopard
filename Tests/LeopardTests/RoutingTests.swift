@@ -26,13 +26,37 @@ struct InterceptorMiddleware : Middleware {
 }
 
 class RoutingTests: XCTestCase {
-    func testAsyncMiddlewares() throws {
+    func testSyncMiddlewares() throws {
         let server = try SyncWebServer(middlewares: [InterceptorMiddleware()])
         
         let request = Request(method: .get, url: "/")
         
         server.get { request in
             return "don't get here"
+        }
+        
+        var received = false
+        
+        server.handle(request, for: TestClient { response in
+            guard let result = response.body as? String else {
+                XCTFail()
+                return
+            }
+            
+            received = true
+            XCTAssertEqual(result, "intercepted")
+        })
+        
+        XCTAssert(received)
+    }
+    
+    func testAsyncMiddlewares() throws {
+        let server = try AsyncWebServer(middlewares: [InterceptorMiddleware()])
+        
+        let request = Request(method: .get, url: "/")
+        
+        server.get { request in
+            return Future { "don't get here" }
         }
         
         var received = false

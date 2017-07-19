@@ -64,7 +64,29 @@ public final class SyncWebServer : RoutedWebServer, SyncRouter {
     }
 }
 
-public final class AsyncWebServer : RoutedWebServer, AsyncRouter { }
+public final class AsyncWebServer : RoutedWebServer, AsyncRouter {
+    public let middlewares: [Middleware]
+    
+    public init<S: Sequence>(middlewares: S, _ config: RoutingConfig? = nil) throws where S.Element : Middleware {
+        self.middlewares = Array(middlewares)
+        
+        if let config = config {
+            try super.init(config)
+        } else {
+            try super.init()
+        }
+    }
+    
+    public override init() throws {
+        self.middlewares = []
+        try super.init()
+    }
+    
+    public override init(_ config: RoutingConfig) throws {
+        middlewares = []
+        try super.init(config)
+    }
+}
 
 public final class WebServer : RoutedWebServer {
     public var async: AsyncRouter {
