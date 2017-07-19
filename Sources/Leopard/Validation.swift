@@ -1,10 +1,10 @@
 public protocol FormRequest : Decodable {
-    func validate(loggingTo validationLogger: ValidationLogger) throws
+    func validate(loggingTo validator: Validator) throws
 }
 
 extension FormRequest {
     public func assertValid() throws {
-        let log = ValidationLogger()
+        let log = Validator()
         
         try self.validate(loggingTo: log)
         
@@ -14,19 +14,76 @@ extension FormRequest {
     }
 }
 
-public class ValidationLogger : Error {
-    public private(set) var errors: [Error] = []
+public protocol EncodableError : Error, Encodable {}
+
+public class ErrorMessage : Encodable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(message)
+    }
     
-    public func assert(_ error: Error?) {
-        guard let error = error else {
-            return
-        }
-        
-        errors.append(error)
+    let error: EncodableError
+    var message: String?
+    
+    public func or(_ message: String) {
+        self.message = message
+    }
+    
+    public init(for error: EncodableError) {
+        self.error = error
     }
 }
 
-public func ==<T : Equatable>(lhs: T, rhs: T) -> Error? {
+extension Optional where Wrapped == ErrorMessage {
+    public func or(_ message: String) {
+        self?.or(message)
+    }
+}
+
+public class Validator : EncodableError {
+    public private(set) var errors: [ErrorMessage] = []
+    
+    @discardableResult
+    public func assertNil<T : Encodable>(_ value: T?) -> ErrorMessage? {
+        guard let value = value else {
+            return nil
+        }
+        
+        let message = ErrorMessage(for: ValidatorError.notNil(value))
+        
+        errors.append(message)
+        
+        return message
+    }
+    
+    @discardableResult
+    public func assertNotNil<T : Encodable>(_ value: T?) -> ErrorMessage? {
+        guard value == nil else {
+            return nil
+        }
+        
+        let message = ErrorMessage(for: ValidatorError.isNil(T.self))
+        
+        errors.append(message)
+        
+        return message
+    }
+    
+    @discardableResult
+    public func assert(_ error: EncodableError?) -> ErrorMessage? {
+        guard let error = error else {
+            return nil
+        }
+        
+        let message = ErrorMessage(for: error)
+        
+        errors.append(message)
+        
+        return message
+    }
+}
+
+public func ==<T : Equatable & Encodable>(lhs: T, rhs: T) -> EncodableError? {
     guard lhs == rhs else {
         return EqualityError(subject: lhs, problem: .notEqual, other: rhs)
     }
@@ -34,7 +91,7 @@ public func ==<T : Equatable>(lhs: T, rhs: T) -> Error? {
     return nil
 }
 
-public func !=<T : Equatable>(lhs: T, rhs: T) -> Error? {
+public func !=<T : Equatable & Encodable>(lhs: T, rhs: T) -> EncodableError? {
     guard lhs == rhs else {
         return EqualityError(subject: lhs, problem: .equal, other: rhs)
     }
@@ -42,7 +99,7 @@ public func !=<T : Equatable>(lhs: T, rhs: T) -> Error? {
     return nil
 }
 
-public func <<T : Comparable>(lhs: T, rhs: T) -> Error? {
+public func <<T : Comparable & Encodable>(lhs: T, rhs: T) -> EncodableError? {
     guard lhs < rhs else {
         return ComparisonError(subject: lhs, problem: .notSmallEnough, other: rhs)
     }
@@ -50,7 +107,7 @@ public func <<T : Comparable>(lhs: T, rhs: T) -> Error? {
     return nil
 }
 
-public func ><T : Comparable>(lhs: T, rhs: T) -> Error? {
+public func ><T : Comparable & Encodable>(lhs: T, rhs: T) -> EncodableError? {
     guard lhs > rhs else {
         return ComparisonError(subject: lhs, problem: .notLargeEnough, other: rhs)
     }
@@ -58,7 +115,7 @@ public func ><T : Comparable>(lhs: T, rhs: T) -> Error? {
     return nil
 }
 
-public func <=<T : Comparable>(lhs: T, rhs: T) -> Error? {
+public func <=<T : Comparable & Encodable>(lhs: T, rhs: T) -> EncodableError? {
     guard lhs <= rhs else {
         return ComparisonError(subject: lhs, problem: .tooLarge, other: rhs)
     }
@@ -66,7 +123,7 @@ public func <=<T : Comparable>(lhs: T, rhs: T) -> Error? {
     return nil
 }
 
-public func >=<T : Comparable>(lhs: T, rhs: T) -> Error? {
+public func >=<T : Comparable & Encodable>(lhs: T, rhs: T) -> EncodableError? {
     guard lhs >= rhs else {
         return ComparisonError(subject: lhs, problem: .tooSmall, other: rhs)
     }
@@ -74,22 +131,37 @@ public func >=<T : Comparable>(lhs: T, rhs: T) -> Error? {
     return nil
 }
 
-public enum EqualityProblem {
+public enum ValidatorError<T : Encodable> : EncodableError {
+    public func encode(to encoder: Encoder) throws {
+        switch self {
+        case .notNil(let value):
+            try value.encode(to: encoder)
+        case .isNil(_):
+            var container = encoder.singleValueContainer()
+            try container.encodeNil()
+        }
+    }
+    
+    case isNil(T.Type)
+    case notNil(T)
+}
+
+public enum EqualityProblem : String, Encodable {
     case equal
     case notEqual
 }
 
-public struct EqualityError<T: Equatable> : Error {
+public struct EqualityError<T: Equatable & Encodable> : EncodableError {
     var subject: T
     var problem: EqualityProblem
     var other: T
 }
 
-public enum ComparisonProblem {
+public enum ComparisonProblem : String, Encodable {
     case tooSmall, tooLarge, notSmallEnough, notLargeEnough
 }
 
-public struct ComparisonError<T: Comparable> : Error {
+public struct ComparisonError<T: Comparable & Encodable> : EncodableError {
     var subject: T
     var problem: ComparisonProblem
     var other: T
