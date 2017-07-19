@@ -21,13 +21,21 @@ class RoutingTests: XCTestCase {
         
         server.group(["path", "to"]) { group in
             group.group(["group", "to"]) { group in
-                group.get("route") { _ in
+                group.get("route") { request in
+                    XCTAssertEqual(request.headers.host, "localhost:8080")
+                    XCTAssertEqual(request.headers.bearer, "sdasdsfascasdsads")
+                    
                     return "result"
                 }
             }
         }
         
-        server.handle(Request(method: .get, url: "/path/to/group/to/route"), for: TestClient { response in
+        let request = Request(method: .get, url: "/path/to/group/to/route", headers: [
+            "Host": "localhost:8080",
+            "Authorization": "Bearer sdasdsfascasdsads"
+        ])
+        
+        server.handle(request, for: TestClient { response in
             guard let result = try response.body?.makeBody().string else {
                 XCTFail()
                 return
