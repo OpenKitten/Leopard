@@ -23,9 +23,9 @@ public class ErrorMessage : Encodable {
     }
     
     let error: EncodableError
-    var message: String?
+    var message: Encodable?
     
-    public func or(_ message: String) {
+    public func or(_ message: Encodable) {
         self.message = message
     }
     
@@ -35,7 +35,7 @@ public class ErrorMessage : Encodable {
 }
 
 extension Optional where Wrapped == ErrorMessage {
-    public func or(_ message: String) {
+    public func or(_ message: Encodable) {
         self?.or(message)
     }
 }
