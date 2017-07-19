@@ -2,7 +2,7 @@ import XCTest
 import Cheetah
 @testable import Leopard
 
-class LoggibngTests: XCTestCase {
+class LoggingTests: XCTestCase {
     func testBasicLogs() throws {
         let request = Request(method: .get, url: "/path/to/group/to/route", headers: [
             "Host": "localhost:8081",
