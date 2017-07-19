@@ -1,22 +1,22 @@
 extension SyncRouter {
-    public func grouped(_ path: String...) -> SyncRoutingGroup {
-        return SyncRoutingGroup(path, pointingTo: self)
+    public func grouped(_ path: String...) -> SyncRoutingCollection {
+        return SyncRoutingCollection(path, pointingTo: self)
     }
     
-    public func grouped<S: Sequence>(_ path: S) -> SyncRoutingGroup where S.Element == String {
-        return SyncRoutingGroup(Array(path), pointingTo: self)
+    public func grouped<S: Sequence>(_ path: S) -> SyncRoutingCollection where S.Element == String {
+        return SyncRoutingCollection(Array(path), pointingTo: self)
     }
     
-    public func group<S: Sequence>(_ path: S, registering closure: ((SyncRoutingGroup) -> ())) where S.Element == String {
+    public func group<S: Sequence>(_ path: S, registering closure: ((SyncRoutingCollection) -> ())) where S.Element == String {
         closure(grouped(path))
     }
     
-    public func group(path: String..., registering closure: ((SyncRoutingGroup) -> ())) {
+    public func group(path: String..., registering closure: ((SyncRoutingCollection) -> ())) {
         closure(grouped(path))
     }
 }
 
-public struct SyncRoutingGroup : SyncRouter {
+public struct SyncRoutingCollection : SyncRouter {
     public func handle(_ request: Request, for remote: HTTPRemote) {
         router.handle(request, for: remote)
     }

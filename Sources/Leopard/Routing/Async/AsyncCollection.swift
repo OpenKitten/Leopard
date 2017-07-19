@@ -1,24 +1,24 @@
 import Lynx
 
 extension AsyncRouter {
-    public func grouped(_ path: String...) -> AsyncRoutingGroup {
-        return AsyncRoutingGroup(path, pointingTo: self)
+    public func grouped(_ path: String...) -> AsyncRoutingCollection {
+        return AsyncRoutingCollection(path, pointingTo: self)
     }
     
-    public func grouped<S: Sequence>(_ path: S) -> AsyncRoutingGroup where S.Element == String {
-        return AsyncRoutingGroup(Array(path), pointingTo: self)
+    public func grouped<S: Sequence>(_ path: S) -> AsyncRoutingCollection where S.Element == String {
+        return AsyncRoutingCollection(Array(path), pointingTo: self)
     }
     
-    public func group<S: Sequence>(_ path: S, registering closure: ((AsyncRoutingGroup) -> ())) where S.Element == String {
+    public func group<S: Sequence>(_ path: S, registering closure: ((AsyncRoutingCollection) -> ())) where S.Element == String {
         closure(grouped(path))
     }
     
-    public func group(path: String..., registering closure: ((AsyncRoutingGroup) -> ())) {
+    public func group(path: String..., registering closure: ((AsyncRoutingCollection) -> ())) {
         closure(grouped(path))
     }
 }
 
-public struct AsyncRoutingGroup : AsyncRouter {
+public struct AsyncRoutingCollection : AsyncRouter {
     public func handle(_ request: Request, for remote: HTTPRemote) {
         router.handle(request, for: remote)
     }

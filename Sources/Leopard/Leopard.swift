@@ -40,7 +40,30 @@ public class RoutedWebServer : WebsocketRouter {
     }
 }
 
-public final class SyncWebServer : RoutedWebServer, SyncRouter { }
+public final class SyncWebServer : RoutedWebServer, SyncRouter {
+    public let middlewares: [SyncMiddleware]
+    
+    public init<S: Sequence>(middlewares: S, _ config: RoutingConfig? = nil) throws where S.Element == SyncMiddleware {
+        self.middlewares = Array(middlewares)
+        
+        if let config = config {
+            try super.init(config)
+        } else {
+            try super.init()
+        }
+    }
+    
+    public override init() throws {
+        self.middlewares = []
+        try super.init()
+    }
+    
+    public override init(_ config: RoutingConfig) throws {
+        middlewares = []
+        try super.init(config)
+    }
+}
+
 public final class AsyncWebServer : RoutedWebServer, AsyncRouter { }
 
 public final class WebServer : RoutedWebServer {

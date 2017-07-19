@@ -1,17 +1,27 @@
 import Lynx
 import Dispatch
 
-public protocol SyncRouter : Router {}
+public protocol SyncRouter : Router {
+    var middlewares: [SyncMiddleware] { get }
+}
 
 /// Vapor API
 extension SyncRouter {
+    public var middlewares: [SyncMiddleware] {
+        return []
+    }
+    
     /// Registers a route
     fileprivate func register(_ path: [String], method: Lynx.Method, handler: @escaping ((Request) throws -> (ResponseRepresentable))) {
         self.register(at: path, method: method) { request, remote in
             do {
-                let response = try handler(request)
+                guard middlewares.count > 0 else {
+                    let response = try handler(request)
+                    
+                    try remote.send(try response.makeResponse())
+                }
                 
-                try remote.send(try response.makeResponse())
+                middlewares
             } catch let error as Encodable & Error {
                 Application.logger?.log(error, level: .error)
                 remote.error(error)

@@ -1,3 +1,4 @@
+import Dispatch
 @_exported import Lynx
 @_exported import Schrodinger
 
@@ -6,7 +7,7 @@ public protocol AsyncRouter : Router {}
 extension AsyncRouter {
     public typealias AsyncHandler = ((Request) throws -> (Future<ResponseRepresentable>))
     
-    public func register(method: Method, at path: [String], handler: @escaping AsyncHandler) {
+    public func register(method: Lynx.Method, at path: [String], handler: @escaping AsyncHandler) {
         self.register(at: path, method: method)  { request, remote in
             do {
                 try handler(request).then { response in
