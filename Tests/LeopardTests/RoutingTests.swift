@@ -103,27 +103,27 @@ class RoutingTests: XCTestCase {
         })
     }
     
-//    func testAsyncRouting() throws {
+    func testAsyncRouting() throws {
 //        let db = try Database("mongodb://localhost/leopard")
+
+        let server = try SyncWebServer()
+//        router.get("/user/:user/friends") { request in
+//            guard
+//                let username = try request.extract(String.self, from: ":user") else {
+//                    throw InvalidRequest()
+//            }
 //
-//        let server = try SyncWebServer()
-////        router.get("/user/:user/friends") { request in
-////            guard
-////                let username = try request.extract(String.self, from: ":user") else {
-////                    throw InvalidRequest()
-////            }
-////
-////            return try db["users"].findOne("username" == username) { user in
-////                guard let user = user else {
-////                    throw NotFound()
-////                }
-////
-////                return try user.friends.resolve { friends in
-////                    return try friends.makeJSON()
-////                }
-////            }
-////        }
+//            return try db["users"].findOne("username" == username) { user in
+//                guard let user = user else {
+//                    throw NotFound()
+//                }
 //
+//                return try user.friends.resolve { friends in
+//                    return try friends.makeJSON()
+//                }
+//            }
+//        }
+
 //        try db["users"].remove()
 //
 //        let id = try db["users"].insert([
@@ -144,17 +144,21 @@ class RoutingTests: XCTestCase {
 //            "username": "test2",
 //            "friend": id
 //        ])
-//
-//        var sockets = [WebSocket]()
-//
-//        server.websocket("pong") { websocket in
-//            websocket.onText { text in
-//                try websocket.send(text)
-//            }
-//
-//            sockets.append(websocket)
-//        }
-//
+
+        var sockets = [WebSocket]()
+
+        server.websocket("pong") { websocket in
+            websocket.onText { text in
+                try websocket.send(text)
+            }
+
+            sockets.append(websocket)
+        }
+        
+        server.get { _ in
+            return "kaas"
+        }
+
 //        server.get("user", ":user", "friends") { request in
 //            let username = try request.extract(from: "user")
 //
@@ -166,9 +170,9 @@ class RoutingTests: XCTestCase {
 //
 //            return Document(array: Array(friends)).makeExtendedJSONString()
 //        }
-//
-//        try server.start()
-//    }
+
+        try server.start()
+    }
 
 
     static var allTests: [(String, (RoutingTests) -> () throws -> Void)] = [

@@ -14,6 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/OpenKitten/Lynx.git", .revision("master")),
+        .package(url: "https://github.com/OpenKitten/Puma.git", .revision("master")),
         .package(url: "https://github.com/OpenKitten/Schrodinger.git", .revision("framework")),
         .package(url: "https://github.com/OpenKitten/Ocelot.git", .revision("master")),
 
