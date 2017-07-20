@@ -9,8 +9,6 @@
 #endif
 
 import XCTest
-import MongoKitten
-import ExtendedJSON
 @testable import Leopard
 
 class ConfigTests: XCTestCase {
