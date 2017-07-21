@@ -27,7 +27,7 @@ class RoutingTests: XCTestCase {
     func testSyncMiddlewares() throws {
         let server = try SyncWebServer(middlewares: [InterceptorMiddleware()])
         
-        let request = Request(method: .get, url: "/")
+        let request = Request(method: .get, path: "/")
         
         server.get { request in
             return "don't get here"
@@ -51,7 +51,7 @@ class RoutingTests: XCTestCase {
     func testAsyncMiddlewares() throws {
         let server = try AsyncWebServer(middlewares: [InterceptorMiddleware()])
         
-        let request = Request(method: .get, url: "/")
+        let request = Request(method: .get, path: "/")
         
         server.get { request in
             return Future { "don't get here" }
@@ -86,7 +86,7 @@ class RoutingTests: XCTestCase {
             }
         }
         
-        let request = Request(method: .get, url: "/path/to/group/to/route", headers: [
+        let request = Request(method: .get, path: "/path/to/group/to/route", headers: [
             "Host": "localhost:8080",
             "Authorization": "Bearer sdasdsfascasdsads"
         ])

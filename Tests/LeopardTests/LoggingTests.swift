@@ -4,7 +4,7 @@ import Cheetah
 
 class LoggingTests: XCTestCase {
     func testBasicLogs() throws {
-        let request = Request(method: .get, url: "/path/to/group/to/route", headers: [
+        let request = Request(method: .get, path: "/path/to/group/to/route", headers: [
             "Host": "localhost:8081",
             "Authorization": "Bearer sdasdsfascasdsads"
         ])
@@ -20,7 +20,7 @@ class LoggingTests: XCTestCase {
                 XCTAssertEqual(request.headers.host, "localhost:8081")
                 XCTAssertEqual(request.headers.bearer, "sdasdsfascasdsads")
                 XCTAssertEqual(request.method, .get)
-                XCTAssertEqual(request.url, "/path/to/group/to/route")
+                XCTAssertEqual(request.path, "/path/to/group/to/route")
             } catch {
                 XCTFail()
             }

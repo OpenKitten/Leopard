@@ -22,7 +22,7 @@ class HeadersTests: XCTestCase {
         cookies["sap"] = "sap"
         cookies["saus"] = "saus"
         
-        let request = Request(method: .get, url: "/")
+        let request = Request(method: .get, path: "/")
         request.cookies = cookies
         
         XCTAssertEqual(request.cookies["kaas"]?.value, "kaas")

@@ -19,7 +19,7 @@ public struct InvalidExtractionError : Error {}
 extension Request {
     /// Extracts the string on the token's position
     public func extract(from token: String) throws -> String {
-        guard let value = self.url.tokens[token] else {
+        guard let value = self.path.tokens[token] else {
             throw InvalidExtractionError()
         }
         
@@ -28,7 +28,7 @@ extension Request {
     
     /// Extracts a type from a PathComponent
     public func extract<PCI: PathComponentInitializable>(_ initializable: PCI.Type, from token: String) throws -> PCI? {
-        guard let value = self.url.tokens[token] else {
+        guard let value = self.path.tokens[token] else {
             throw InvalidExtractionError()
         }
         

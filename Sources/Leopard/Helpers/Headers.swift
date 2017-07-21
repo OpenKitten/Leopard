@@ -21,7 +21,7 @@ extension Headers {
 extension Request : CustomDebugStringConvertible {
     public var debugDescription: String {
         return """
-        \(self.method.string) \(self.url.string) HTTP/1.1
+        \(self.method.string) \(self.path.string) HTTP/1.1
         \(self.headers)
         """
     }
