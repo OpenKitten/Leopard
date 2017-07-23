@@ -1,15 +1,17 @@
 import Lynx
 
 /// Something that can be crafted from a path component
-public protocol PathComponentInitializable {
-    init?(from string: String) throws
+public protocol PathComponentExtracting {
+    associatedtype Extracted
+    
+    static func extract(from string: String) throws -> Extracted?
 }
 
 /// Makes a string craftable from a path component
-extension String : PathComponentInitializable {
+extension String : PathComponentExtracting {
     /// Initializes a string from a path component
-    public init?(from string: String) throws {
-        self = string
+    public static func extract(from string: String) throws -> String? {
+        return string
     }
 }
 
@@ -27,11 +29,11 @@ extension Request {
     }
     
     /// Extracts a type from a PathComponent
-    public func extract<PCI: PathComponentInitializable>(_ initializable: PCI.Type, from token: String) throws -> PCI? {
+    public func extract<PCI: PathComponentExtracting>(_ initializable: PCI.Type, from token: String) throws -> PCI.Extracted? {
         guard let value = self.path.tokens[token] else {
             throw InvalidExtractionError()
         }
         
-        return try PCI(from: value)
+        return try PCI.extract(from: value)
     }
 }
