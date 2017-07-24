@@ -1,17 +1,19 @@
 import Lynx
 import Dispatch
 
+/// A synchronous HTTP Router
 public protocol SyncRouter : Router {
+    /// All middlewares that requests get routed through
     var middlewares: [Middleware] { get }
 }
 
-/// Vapor API
 extension SyncRouter {
+    /// No middlewares by default
     public var middlewares: [Middleware] {
         return []
     }
     
-    /// Registers a route
+    /// Registers a new synchronous handlers at the provided path and method
     fileprivate func register(_ path: [String], method: Lynx.Method, handler: @escaping ((Request) throws -> (ResponseRepresentable))) {
         self.register(at: path, method: method) { request, remote in
             do {
@@ -48,22 +50,22 @@ extension SyncRouter {
         }
     }
     
-    /// Registers a get route
+    /// Handles the path for GET requests
     public func get(_ path: String..., handler: @escaping ((Request) throws -> (ResponseRepresentable))) {
         self.register(path, method: .get, handler: handler)
     }
     
-    /// Registers a put route
+    /// Handles the path for PUT requests
     public func put(_ path: String..., handler: @escaping ((Request) throws -> (ResponseRepresentable))) {
         self.register(path, method: .put, handler: handler)
     }
     
-    /// Registers a post route
+    /// Handles the path for POST requests
     public func post(_ path: String..., handler: @escaping ((Request) throws -> (ResponseRepresentable))) {
         self.register(path, method: .post, handler: handler)
     }
     
-    /// Registers a delete route
+    /// Handles the path for DELETE requests
     public func delete(_ path: String..., handler: @escaping ((Request) throws -> (ResponseRepresentable))) {
         self.register(path, method: .delete, handler: handler)
     }
