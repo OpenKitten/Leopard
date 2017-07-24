@@ -28,15 +28,15 @@ public class RoutedWebServer : WebsocketRouter {
     ///
     /// Accepts custom HTTP and routing configurations
     public init(_ config: RoutingConfig) throws {
-        let routingToken = config.routingToken
+        let routeParameterToken = config.routeParameterToken
         
-        if let routingToken = routingToken {
-            guard routingToken.utf8.count <= 1 else {
-                throw LeopardConfigError.invalidRoutingToken(routingToken)
+        if let routeParameterToken = routeParameterToken {
+            guard routeParameterToken.utf8.count <= 1 else {
+                throw LeopardConfigError.invalidRouteParameterToken(routeParameterToken)
             }
         }
         
-        self.router = TrieRouter(startingTokensWith: config.routingToken?.utf8.first)
+        self.router = TrieRouter(startingTokensWith: config.routeParameterToken?.utf8.first)
         
         if let config = config as? HTTPServerConfig {
             self.server = try HTTPServer(hostname: config.hostname, port: config.port, handler: router.handle)

@@ -26,7 +26,7 @@ public protocol RoutingConfig : Config {
     /// The token to prefix parameters with
     ///
     /// Defaults to `:`
-    var routingToken: String? { get }
+    var routeParameterToken: String? { get }
 }
 
 extension Config {
@@ -47,14 +47,14 @@ public enum LeopardConfigError : Error, CustomDebugStringConvertible {
     /// The routing token is invalid
     ///
     /// It may only be a single character long
-    case invalidRoutingToken(String)
+    case invalidRouteParameterToken(String)
     
     /// The file at the given path does not exist
     case fileDoesNotExist(atPath: String)
     
     public var debugDescription: String {
         switch self {
-        case .invalidRoutingToken(let token):
+        case .invalidRouteParameterToken(let token):
             return "The token may only be one character long, contained \"\(token)\""
         case .fileDoesNotExist(let path):
             return "The file at the following path did not exist: \"\(path)\""

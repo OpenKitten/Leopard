@@ -18,7 +18,7 @@ class ConfigTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(config.routingToken, ":")
+        XCTAssertEqual(config.routeParameterToken, ":")
         XCTAssertEqual(config.port, 1337)
         XCTAssertEqual(config.hostname, "openkitten.org")
         
@@ -29,7 +29,7 @@ class ConfigTests: XCTestCase {
 }
 
 class Config : RoutingConfig, HTTPServerConfig {
-    var routingToken: String? = ":"
+    var routeParameterToken: String? = ":"
     var port: UInt16 = 80
     var hostname: String = "0.0.0.0"
 }
