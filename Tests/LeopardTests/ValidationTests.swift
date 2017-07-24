@@ -16,7 +16,7 @@ class ValidationTests: XCTestCase {
     }
 }
 
-struct RegisterForm : FormRequest {
+struct RegisterForm : Validatable {
     var username: String
     var password: String
     var age: Int
