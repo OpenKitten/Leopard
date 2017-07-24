@@ -16,6 +16,7 @@ let package = Package(
         .package(url: "https://github.com/OpenKitten/Lynx.git", .revision("master")),
         .package(url: "https://github.com/OpenKitten/Schrodinger.git", .revision("framework")),
         .package(url: "https://github.com/OpenKitten/Ocelot.git", .revision("master")),
+        .package(url: "https://github.com/OpenKitten/Cheetah.git", .revision("framework")),
 
 //        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .revision("swift4")),
 //        .package(url: "https://github.com/OpenKitten/MongoKitten.git", .revision("async")),
