@@ -25,7 +25,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "Leopard",
-            dependencies: ["Lynx", "Schrodinger"]),
+            dependencies: ["Lynx", "Schrodinger", "Cheetah"]),
         .testTarget(
             name: "LeopardTests",
             dependencies: ["Leopard", "Lynx", "Schrodinger"]),
