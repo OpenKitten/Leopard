@@ -1,45 +1,36 @@
 # Leopard
 
-A high performance, Swift 4 Web Framework with a great API.
+An extremely fast Swift 4 web framework with an easy to use API.
 
-<<<<<<< HEAD
-We're still in beta, and will release when Swift 4 is released and the framework is meeting the following criterea.
+Leopard is currently in beta, with a planned release alongside Swift 4's official release.
 
-[x] Insanely fast
-=======
-We're still in beta, and will release after Swift 4 has been release.
+In following OpenKitten's goals, Leopard's criteria are:
 
-The framework must be meeting the following criterea as part of the OpenKitten goals:
-
-- [x] The fastest
+- [x] The fastest Swift web framework
+- [x] Simple enough for beginners, and extensive enough for experts
+- [x] Quick setup: download and compile
+- [x] No dependencies except Swift*
+- [x] Beautifully clear documentation
 - [x] Complete asynchronous support
 - [x] Customizable for complex use cases
-- [x] Amazing docs
 - [x] The most powerful features
-- [x] No unnecessary dependencies
 - [x] Integrate with the Swift ecosystem
-- [x] Download and compile, that's it, no dependencies except Swift \*\*
+- [ ] Syntax so clean and simple it feels like the standard library
 - [ ] Completely tested
-- [ ] The syntax is so clean and simple that you almost forgot it's not the standard library
 - [ ] Extensive production testing
 
-And striving for the following goals by design, too:
+By design:
 
 - [ ] So complete that 'batteries included' is an understatement
-- [ ] Programming a website in assembly would give you slower performance
-- [ ] [Why are you still looking here?! Get started!](http://openkitten.org/beta/site/leopard/)
+- [ ] Better performance than a website programmed in assembly
+- [ ] [What are you waiting for?! Get started!](http://openkitten.org/beta/site/leopard/)
 
-\*\* OpenSSL is required on Linux for SSL support.
+\* OpenSSL is required on Linux for SSL support.
 
 ## OpenKitten
->>>>>>> 8ff8bdecd4003dc75a1193df4025d8778b4f90bd
 
-## Docs and tutorials
+## Documentation and Tutorials
 
-We've written and are writing a lot of docs about Leopard and ensure everything that's meant to be used it documented and tested.
+We're constantly improving Leopard's documentation so you can develop with confidence.
 
-<<<<<<< HEAD
 [Docs and tutorials](http://openkitten.org/beta/site/leopard/)
-=======
-[Docs and tutorials](http://openkitten.org/beta/site/leopard/)
->>>>>>> 8ff8bdecd4003dc75a1193df4025d8778b4f90bd
