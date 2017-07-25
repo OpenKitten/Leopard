@@ -22,7 +22,7 @@ In following OpenKitten's goals, Leopard's criteria are:
 By design:
 
 - [ ] So complete that 'batteries included' is an understatement
-- [ ] Programming a website in assembly would give you slower performance
+- [ ] Better performance than a website programmed in assembly
 - [ ] [What are you waiting for?! Get started!](http://openkitten.org/beta/site/leopard/)
 
 \* OpenSSL is required on Linux for SSL support.
