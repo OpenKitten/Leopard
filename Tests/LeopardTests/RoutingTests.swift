@@ -1,3 +1,4 @@
+import Lynx
 import XCTest
 @testable import Leopard
 
@@ -24,6 +25,28 @@ struct InterceptorMiddleware : Middleware {
 }
 
 class RoutingTests: XCTestCase {
+    func testNotFound() throws {
+        let router = TrieRouter()
+        router.defaultHandler = Lynx.NotFound(body: "Not Found").handle
+        
+        router.handle(Request(method: .get, path: "/"), for: TestClient { response in
+            XCTAssert(response.status == Status.notFound)
+        })
+        
+        router.register(at: [], method: .get, handler: { _, client in
+            do {
+                try client.send(try "test".makeResponse())
+            } catch {
+                client.error(error)
+            }
+        })
+        
+        router.handle(Request(method: .get, path: "/"), for: TestClient { response in
+            XCTAssert(response.status == Status.ok)
+            XCTAssertEqual(response.body?.string, "test")
+        })
+    }
+    
     func testSyncMiddlewares() throws {
         let server = try SyncWebServer(middlewares: [InterceptorMiddleware()])
         

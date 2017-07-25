@@ -13,11 +13,11 @@ extension BodyRepresentable {
     
     /// Attempts to read the body as a UTF-8 String
     public var string: String? {
-        guard let buffer = try? self.makeBody().buffer else {
+        guard let body = try? self.makeBody() else {
             return nil
         }
         
-        return String(bytes: buffer, encoding: .utf8)
+        return String(bytes: body.buffer, encoding: .utf8)
     }
 }
 
