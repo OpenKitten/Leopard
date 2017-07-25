@@ -2,11 +2,6 @@
 
 A high performance, Swift 4 Web Framework with a great API.
 
-<<<<<<< HEAD
-We're still in beta, and will release when Swift 4 is released and the framework is meeting the following criterea.
-
-[x] Insanely fast
-=======
 We're still in beta, and will release after Swift 4 has been release.
 
 The framework must be meeting the following criterea as part of the OpenKitten goals:
@@ -38,8 +33,4 @@ And striving for the following goals by design, too:
 
 We've written and are writing a lot of docs about Leopard and ensure everything that's meant to be used it documented and tested.
 
-<<<<<<< HEAD
 [Docs and tutorials](http://openkitten.org/beta/site/leopard/)
-=======
-[Docs and tutorials](http://openkitten.org/beta/site/leopard/)
->>>>>>> 8ff8bdecd4003dc75a1193df4025d8778b4f90bd

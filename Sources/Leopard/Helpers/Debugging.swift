@@ -4,7 +4,7 @@ extension Request : CustomDebugStringConvertible {
     /// Helps making Request easily readable
     public var debugDescription: String {
         return """
-        \(self.method.string) \(self.path.string) HTTP/1.1
+        \(self.method.string) \(self.path.rawValue) HTTP/1.1
         \(self.headers)
         """
     }

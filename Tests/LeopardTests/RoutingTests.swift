@@ -27,7 +27,7 @@ struct InterceptorMiddleware : Middleware {
 class RoutingTests: XCTestCase {
     func testNotFound() throws {
         let router = TrieRouter()
-        router.defaultHandler = Lynx.NotFound(body: "Not Found").handle
+        router.fallbackHandler = Lynx.NotFound(body: "Not Found").handle
         
         router.handle(Request(method: .get, path: "/"), for: TestClient { response in
             XCTAssert(response.status == Status.notFound)
