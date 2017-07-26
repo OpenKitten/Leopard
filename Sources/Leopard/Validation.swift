@@ -104,6 +104,39 @@ public class Validator : EncodableError {
         
         return message
     }
+    
+    /// Asserts the condition is false
+    @discardableResult
+    public func assertFalse(_ bool: Bool) -> ErrorMessage? {
+        guard !bool else {
+            return nil
+        }
+        
+        let message = ErrorMessage(for: EqualityError(subject: bool, problem: .notEqual, other: false))
+        
+        errors.append(message)
+        
+        return message
+    }
+    
+    /// Asserts the condition is true
+    @discardableResult
+    public func assertTrue(_ bool: Bool) -> ErrorMessage? {
+        guard bool else {
+            return nil
+        }
+        
+        let message = ErrorMessage(for: EqualityError(subject: bool, problem: .notEqual, other: true))
+        
+        errors.append(message)
+        
+        return message
+    }
+    
+    /// Asserts the condition is true
+    public func validate(_ validatable: Validatable) throws {
+        try validatable.validate(loggingTo: self)
+    }
 }
 
 /// Checks if two values are equal.
