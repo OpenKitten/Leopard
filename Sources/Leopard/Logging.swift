@@ -54,11 +54,13 @@ public class JSONLogger : Logger {
     /// Logs the entity as JSON to the closure, prefixed by the log level
     public func log(_ entity: Encodable, level: LogLevel) {
         do {
-            let entity = try JSONEncoder().encode(entity).serializedString()
-            closure(level.rawValue + ": " + entity)
-        } catch {
-            Swift.print("Unable to log entity since it fails JSON Encoding")
-            Swift.print(entity)
-        }
+            if let entity = try JSONEncoder().encode(value: entity) {
+                closure(level.rawValue + ": " + entity.serializedString())
+                return
+            }
+        } catch {}
+        
+        Swift.print("Unable to log entity since it fails JSON Encoding")
+        Swift.print(entity)
     }
 }
