@@ -27,5 +27,11 @@ class LoggingTests: XCTestCase {
         }
         
         logger.log(request, level: .verbose)
+        
+        let logger2 = JSONLogger { string in
+            XCTAssertEqual("verbose: test", string)
+        }
+        
+        logger2.log("test", level: .verbose)
     }
 }
