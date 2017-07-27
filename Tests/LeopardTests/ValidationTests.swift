@@ -29,6 +29,8 @@ struct RegisterForm : Validatable {
         validator.assert(self.age > 18).or("Too young")
         validator.assert(self.password.characters.count > 3).or("Passsword too short")
         validator.assert(self.programmer == true).or("Not a programmer")
+        validator.assertTrue(self.programmer).or("Not a programmer")
+        validator.assertFalse(!self.programmer).or("Not a programmer")
         validator.assertNil(optional).or("Not nil")
     }
 }

@@ -108,7 +108,7 @@ public class Validator : EncodableError {
     /// Asserts the condition is false
     @discardableResult
     public func assertFalse(_ bool: Bool) -> ErrorMessage? {
-        guard !bool else {
+        guard bool else {
             return nil
         }
         
@@ -122,7 +122,7 @@ public class Validator : EncodableError {
     /// Asserts the condition is true
     @discardableResult
     public func assertTrue(_ bool: Bool) -> ErrorMessage? {
-        guard bool else {
+        guard !bool else {
             return nil
         }
         
