@@ -29,6 +29,7 @@ class ConfigTests: XCTestCase {
 }
 
 class Config : RoutingConfig, HTTPServerConfig {
+    var splitPaths: Bool?
     var routeParameterToken: String? = ":"
     var port: UInt16 = 80
     var hostname: String = "0.0.0.0"
