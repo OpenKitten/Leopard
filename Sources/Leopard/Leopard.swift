@@ -29,6 +29,7 @@ public class RoutedWebServer : WebsocketRouter {
     /// Accepts custom HTTP and routing configurations
     public init(_ config: RoutingConfig) throws {
         let routeParameterToken = config.routeParameterToken
+        let splitPaths = config.splitPaths ?? true
         
         if let routeParameterToken = routeParameterToken {
             guard routeParameterToken.utf8.count <= 1 else {
@@ -36,7 +37,7 @@ public class RoutedWebServer : WebsocketRouter {
             }
         }
         
-        self.router = TrieRouter(startingTokensWith: config.routeParameterToken?.utf8.first)
+        self.router = TrieRouter(startingTokensWith: config.routeParameterToken?.utf8.first, splittingPaths: splitPaths)
         
         if let config = config as? HTTPServerConfig {
             self.server = try HTTPServer(hostname: config.hostname, port: config.port, handler: router.handle)

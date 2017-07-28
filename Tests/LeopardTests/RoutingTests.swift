@@ -25,6 +25,35 @@ struct InterceptorMiddleware : Middleware {
 }
 
 class RoutingTests: XCTestCase {
+    func testMixedSlashRoutes() throws {
+        let server = try SyncWebServer()
+        
+        server.group(["path", "to"]) { group in
+            group.group(["group/to"]) { group in
+                group.get("route") { request in
+                    XCTAssertEqual(request.headers.host, "localhost:8080")
+                    XCTAssertEqual(request.headers.bearer, "sdasdsfascasdsads")
+                    
+                    return "result"
+                }
+            }
+        }
+        
+        let request = Request(method: .get, path: "/path/to/group/to/route", headers: [
+            "Host": "localhost:8080",
+            "Authorization": "Bearer sdasdsfascasdsads"
+            ])
+        
+        server.handle(request, for: TestClient { response in
+            guard let result = try response.body?.makeBody().string else {
+                XCTFail()
+                return
+            }
+            
+            XCTAssertEqual(result, "result")
+        })
+    }
+    
     func testNotFound() throws {
         let router = TrieRouter()
         router.fallbackHandler = Lynx.NotFound(body: "Not Found").handle

@@ -27,6 +27,8 @@ public protocol RoutingConfig : Config {
     ///
     /// Defaults to `:`
     var routeParameterToken: String? { get }
+    
+    var splitPaths: Bool? { get }
 }
 
 extension Config {
