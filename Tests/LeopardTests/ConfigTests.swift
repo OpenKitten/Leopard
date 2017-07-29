@@ -12,6 +12,26 @@ import XCTest
 @testable import Leopard
 
 class ConfigTests: XCTestCase {
+    func testWS() throws {
+        let config = Config()
+        config.port = 8080
+        
+        let ws = try WebServer(config)
+        
+        ws.websocket("ws") { ws in
+            ws.onText = { ws, string in
+                try ws.send(string)
+            }
+            
+            ws.onBinary = { ws, buffer in
+                try ws.send(buffer)
+            }
+//            ws.close()
+        }
+        
+        try ws.start()
+    }
+    
     func testBasicConfig() throws {
         guard let config = try Config.decodeFromJSON(atPath: workDir + "Basic.json") else {
             XCTFail()
