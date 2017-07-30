@@ -18,8 +18,8 @@ extension AsyncRouter {
     public typealias AsyncHandler = ((Request) throws -> (Future<ResponseRepresentable>))
     
     /// Registers a new asynchronous handler at the provided path and method
-    public func register(method: Lynx.Method, at path: [String], handler: @escaping AsyncHandler) {
-        self.register(at: path, method: method)  { request, remote in
+    public func register(method: Lynx.Method, at path: [String], isFallbackHandler: Bool = false, handler: @escaping AsyncHandler) {
+        self.register(at: path, method: method, isFallbackHandler: isFallbackHandler) { request, remote in
             do {
                 guard self.middlewares.count > 0 else {
                     try handler(request).then { response in

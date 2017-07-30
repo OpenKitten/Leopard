@@ -9,7 +9,7 @@ extension WebsocketRouter {
     /// Handles an incoming WebSocket. If you don't store the websocket anywhere it will be deallocated,
     /// closing the connection
     public func websocket(_ path: String..., handler: @escaping ((WebSocket) throws -> ())) {
-        self.register(at: path, method: .get) { req, remote in
+        self.register(at: path, method: .get, isFallbackHandler: false) { req, remote in
             guard let client = remote as? Client else {
                 remote.error(WebSocketError.couldNotConnect)
                 return

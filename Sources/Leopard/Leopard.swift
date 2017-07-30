@@ -3,8 +3,8 @@ import Lynx
 /// A basic webserver with routing and websocket capabilities
 public class RoutedWebServer : WebsocketRouter {
     /// Registers a route to the router
-    public func register(at path: [String], method: Method, handler: @escaping RequestHandler) {
-        router.register(at: path, method: method, handler: handler)
+    public func register(at path: [String], method: Method, isFallbackHandler: Bool = false, handler: @escaping RequestHandler) {
+        router.register(at: path, method: method, isFallbackHandler: isFallbackHandler, handler: handler)
     }
     
     /// Handles a request, passing it to the router
@@ -20,7 +20,7 @@ public class RoutedWebServer : WebsocketRouter {
     
     /// Creates a new basic WebServer
     public init() throws {
-        self.router = TrieRouter(startingTokensWith: 0x3a)
+        self.router = TrieRouter()
         self.server = try HTTPServer(handler: router.handle)
     }
     
@@ -28,16 +28,28 @@ public class RoutedWebServer : WebsocketRouter {
     ///
     /// Accepts custom HTTP and routing configurations
     public init(_ config: RoutingConfig) throws {
-        let routeParameterToken = config.routeParameterToken
-        let splitPaths = config.splitPaths ?? true
+        let routeParameterTokenString = config.routeParameterToken
+        let byte: UInt8?
         
-        if let routeParameterToken = routeParameterToken {
-            guard routeParameterToken.utf8.count <= 1 else {
-                throw LeopardConfigError.invalidRouteParameterToken(routeParameterToken)
+        config: if let routeParameterTokenString = routeParameterTokenString {
+            guard routeParameterTokenString.count == 1 else {
+                byte = nil
+                break config
             }
+            
+            guard let character = routeParameterTokenString.utf8.first else {
+                throw LeopardConfigError.invalidRouteParameterToken(routeParameterTokenString)
+            }
+            
+            byte = UInt8(character)
+        } else {
+            byte = 0x3a
         }
         
-        self.router = TrieRouter(startingTokensWith: config.routeParameterToken?.utf8.first, splittingPaths: splitPaths)
+        var config = TrieRouter.Config()
+        config.tokenByte = byte
+        
+        self.router = TrieRouter()
         
         if let config = config as? HTTPServerConfig {
             self.server = try HTTPServer(hostname: config.hostname, port: config.port, handler: router.handle)
