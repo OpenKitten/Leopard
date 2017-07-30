@@ -3,7 +3,7 @@ import Lynx
 /// A basic webserver with routing and websocket capabilities
 public class RoutedWebServer : WebsocketRouter {
     /// Registers a route to the router
-    public func register(at path: [String], method: Method, isFallbackHandler: Bool = false, handler: @escaping RequestHandler) {
+    public func register(at path: [String], method: Method?, isFallbackHandler: Bool = false, handler: @escaping RequestHandler) {
         router.register(at: path, method: method, isFallbackHandler: isFallbackHandler, handler: handler)
     }
     

@@ -44,12 +44,11 @@ class ConfigTests: XCTestCase {
         
         let server = try WebServer(config)
         
-        XCTAssertEqual(server.router.tokenByte, 0x3a)
+        XCTAssertEqual(server.router.config.tokenByte, 0x3a)
     }
 }
 
 class Config : RoutingConfig, HTTPServerConfig {
-    var splitPaths: Bool?
     var routeParameterToken: String? = ":"
     var port: UInt16 = 80
     var hostname: String = "0.0.0.0"

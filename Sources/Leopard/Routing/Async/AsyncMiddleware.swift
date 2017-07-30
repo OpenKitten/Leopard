@@ -20,7 +20,7 @@ public struct AsyncRoutingGroup : AsyncRouter {
     }
     
     /// Registers a route grouped under the middlewares
-    public func register(at path: [String], method: Method, isFallbackHandler: Bool = false, handler: @escaping RequestHandler) {
+    public func register(at path: [String], method: Method?, isFallbackHandler: Bool = false, handler: @escaping RequestHandler) {
         guard middlewares.count > 0 else {
             router.register(at: path, method: method, isFallbackHandler: isFallbackHandler, handler: handler)
             return

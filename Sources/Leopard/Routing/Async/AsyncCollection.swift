@@ -33,7 +33,7 @@ public struct AsyncRoutingCollection : AsyncRouter {
     }
     
     /// Registers a route grouped by the path
-    public func register(at path: [String], method: Method, isFallbackHandler: Bool = false, handler: @escaping RequestHandler) {
+    public func register(at path: [String], method: Method?, isFallbackHandler: Bool = false, handler: @escaping RequestHandler) {
         router.register(at: self.path + path, method: method, isFallbackHandler: isFallbackHandler, handler: handler)
     }
     
