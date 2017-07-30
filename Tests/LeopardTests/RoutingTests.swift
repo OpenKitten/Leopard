@@ -26,7 +26,7 @@ struct InterceptorMiddleware : Middleware {
 
 class RoutingTests: XCTestCase {
     func testMixedSlashRoutes() throws {
-        let server = try SyncWebServer()
+        let server = try WebServer()
         
         server.group(["path", "to"]) { group in
             group.group(["group/to"]) { group in
@@ -34,7 +34,7 @@ class RoutingTests: XCTestCase {
                     XCTAssertEqual(request.headers.host, "localhost:8080")
                     XCTAssertEqual(request.headers.bearer, "sdasdsfascasdsads")
                     
-                    return "result"
+                    return Future { "result" }
                 }
             }
         }
@@ -77,12 +77,12 @@ class RoutingTests: XCTestCase {
     }
     
     func testSyncMiddlewares() throws {
-        let server = try SyncWebServer(middlewares: [InterceptorMiddleware()])
+        let server = try WebServer(middlewares: [InterceptorMiddleware()])
         
         let request = Request(method: .get, path: "/")
         
         server.get { request in
-            return "don't get here"
+            return Future { "don't get here" }
         }
         
         var received = false
@@ -101,7 +101,7 @@ class RoutingTests: XCTestCase {
     }
     
     func testAsyncMiddlewares() throws {
-        let server = try AsyncWebServer(middlewares: [InterceptorMiddleware()])
+        let server = try WebServer(middlewares: [InterceptorMiddleware()])
         
         let request = Request(method: .get, path: "/")
         
@@ -125,7 +125,7 @@ class RoutingTests: XCTestCase {
     }
     
     func testSyncRouteGrouping() throws {
-        let server = try SyncWebServer()
+        let server = try WebServer()
         
         server.group(["path", "to"]) { group in
             group.group(["group", "to"]) { group in
@@ -133,7 +133,7 @@ class RoutingTests: XCTestCase {
                     XCTAssertEqual(request.headers.host, "localhost:8080")
                     XCTAssertEqual(request.headers.bearer, "sdasdsfascasdsads")
                     
-                    return "result"
+                    return Future { "result" }
                 }
             }
         }

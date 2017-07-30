@@ -42,7 +42,7 @@ class ConfigTests: XCTestCase {
         XCTAssertEqual(config.port, 1337)
         XCTAssertEqual(config.hostname, "openkitten.org")
         
-        let server = try AsyncWebServer(config)
+        let server = try WebServer(config)
         
         XCTAssertEqual(server.router.tokenByte, 0x3a)
     }
