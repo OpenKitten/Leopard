@@ -18,7 +18,7 @@ extension AsyncRouter {
     public typealias AsyncHandler = ((Request) throws -> (Future<ResponseRepresentable>))
     
     /// Registers a new asynchronous handler at the provided path and method
-    public func register(method: Lynx.Method, at path: [String], isFallbackHandler: Bool = false, handler: @escaping AsyncHandler) {
+    public func register(method: Lynx.Method?, at path: [String], isFallbackHandler: Bool = false, handler: @escaping AsyncHandler) {
         self.register(at: path, method: method, isFallbackHandler: isFallbackHandler) { request, remote in
             do {
                 guard self.middlewares.count > 0 else {
@@ -88,5 +88,10 @@ extension AsyncRouter {
     /// Handles the path for DELETE requests
     public func delete(_ path: String..., handler: @escaping AsyncHandler) {
         self.register(method: .delete, at: path, handler: handler)
+    }
+    
+    /// Handles the path for DELETE requests
+    public func any(_ path: String..., handler: @escaping AsyncHandler) {
+        self.register(method: nil, at: path, handler: handler)
     }
 }
