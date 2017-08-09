@@ -13,13 +13,10 @@ let package = Package(
             targets: ["Leopard"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/OpenKitten/Lynx.git", .revision("master")),
-        .package(url: "https://github.com/OpenKitten/Schrodinger.git", .revision("framework")),
-        .package(url: "https://github.com/OpenKitten/Ocelot.git", .revision("master")),
-        .package(url: "https://github.com/OpenKitten/Cheetah.git", .revision("framework")),
-
-//        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .revision("swift4")),
-//        .package(url: "https://github.com/OpenKitten/MongoKitten.git", .revision("async")),
+        .package(url: "https://github.com/OpenKitten/Lynx.git", .exact("1.0.0-beta1")),
+        .package(url: "https://github.com/OpenKitten/Schrodinger.git", .exact("2.0.0-beta1")),
+        .package(url: "https://github.com/OpenKitten/Ocelot.git", .revision("1.0.0-beta1")),
+        .package(url: "https://github.com/OpenKitten/Cheetah.git", from: "2.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
