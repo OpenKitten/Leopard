@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/OpenKitten/Lynx.git", .exact("1.0.0-beta1")),
         .package(url: "https://github.com/OpenKitten/Schrodinger.git", .exact("2.0.0-beta1")),
-        .package(url: "https://github.com/OpenKitten/Ocelot.git", .revision("1.0.0-beta1")),
+        .package(url: "https://github.com/OpenKitten/Ocelot.git", .exact("1.0.0-beta1")),
         .package(url: "https://github.com/OpenKitten/Cheetah.git", from: "2.0.0"),
     ],
     targets: [
