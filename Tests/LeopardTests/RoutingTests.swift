@@ -25,6 +25,16 @@ struct InterceptorMiddleware : Middleware {
 }
 
 class RoutingTests: XCTestCase {
+    func testPerformance() throws {
+        let server = try WebServer()
+        
+        server.get("test") { _ in
+            return Future { "kaas" }
+        }
+        
+        try server.start()
+    }
+    
     func testMixedSlashRoutes() throws {
         let server = try WebServer()
         

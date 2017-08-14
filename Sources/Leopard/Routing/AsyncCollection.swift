@@ -21,7 +21,7 @@ extension AsyncRouter {
     /// Groups routes in the RoutingCollection at the provided path
     ///
     /// Calls the provided closure with the route collection
-    public func group(path: String..., registering closure: ((AsyncRoutingCollection) -> ())) {
+    public func group(_ path: String..., registering closure: ((AsyncRoutingCollection) -> ())) {
         closure(grouped(path))
     }
 }
